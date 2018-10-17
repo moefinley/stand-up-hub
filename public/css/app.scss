@@ -1,0 +1,21 @@
+#listOfNamesToSelect {
+    font-size: 20px;
+    display: flex;
+    padding-left: 0;
+    li {
+        padding: 5px;
+        list-style: none;
+        label input {
+            margin-left: 10px;
+        }
+    }
+}
+#listOfNames {
+    font-size: 35px;
+    display: flex;
+    padding-left: 0;
+    li {
+        padding: 5px;
+        list-style: none;
+    }
+}

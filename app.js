@@ -20,7 +20,9 @@ const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
 const multer = require('multer');
 
-const upload = multer({ dest: path.join(__dirname, 'uploads') });
+const NamePicker = require('./models/NamePicker');
+
+const upload = multer({ dest: path.join(__dirname, 'public/uploads') });
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
@@ -34,6 +36,7 @@ const homeController = require('./controllers/home');
 const userController = require('./controllers/user');
 const apiController = require('./controllers/api');
 const contactController = require('./controllers/contact');
+const submitCodeController = require('./controllers/submit-code');
 
 /**
  * API keys and Passport configuration.
@@ -89,7 +92,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use((req, res, next) => {
-  if (req.path === '/api/upload') {
+  if (req.path === '/api/upload' || req.path === '/submit-code') {
     next();
   } else {
     lusca.csrf()(req, res, next);
@@ -126,6 +129,7 @@ app.use('/webfonts', express.static(path.join(__dirname, 'node_modules/@fortawes
  * Primary app routes.
  */
 app.get('/', homeController.index);
+app.post('/', homeController.updateUser);
 app.get('/login', userController.getLogin);
 app.post('/login', userController.postLogin);
 app.get('/logout', userController.logout);
@@ -142,6 +146,8 @@ app.post('/account/profile', passportConfig.isAuthenticated, userController.post
 app.post('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
+app.get('/submit-code', submitCodeController.showForm);
+app.post('/submit-code', upload.single('myFile'), submitCodeController.submitCode);
 
 /**
  * API examples routes.
@@ -233,7 +239,8 @@ if (process.env.NODE_ENV === 'development') {
 } else {
   app.use((err, req, res, next) => {
     console.error(err);
-    res.status(500).send('Server Error');
+    res.status(500)
+      .send('Server Error');
   });
 }
 
@@ -244,5 +251,56 @@ app.listen(app.get('port'), () => {
   console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
   console.log('  Press CTRL-C to stop\n');
 });
+
+// let namePicker = new NamePicker({
+//   lastSelectedName: 'Alicia',
+//   teamMembers: [
+//     {
+//       name: 'Alicia',
+//       selected: true
+//     },
+//     {
+//       name: 'Becky',
+//       selected: true
+//     },
+//     {
+//       name: 'Bryan',
+//       selected: true
+//     },
+//     {
+//       name: 'Catalin',
+//       selected: true
+//     },
+//     {
+//       name: 'Evie',
+//       selected: true
+//     },
+//     {
+//       name: 'Geoff',
+//       selected: true
+//     },
+//     {
+//       name: 'Michaela',
+//       selected: true
+//     },
+//     {
+//       name: 'Roxana',
+//       selected: true
+//     },
+//     {
+//       name: 'Shiva',
+//       selected: true
+//     },
+//     {
+//       name: 'Telma',
+//       selected: true
+//     },
+//     {
+//       name: 'Tim',
+//       selected: true
+//     }
+//   ]
+// });
+// namePicker.save();
 
 module.exports = app;

@@ -1,0 +1,19 @@
+#listOfNamesToSelect {
+  font-size: 20px;
+  display: flex;
+  padding-left: 0; }
+  #listOfNamesToSelect li {
+    padding: 5px;
+    list-style: none; }
+    #listOfNamesToSelect li label input {
+      margin-left: 10px; }
+
+#listOfNames {
+  font-size: 35px;
+  display: flex;
+  padding-left: 0; }
+  #listOfNames li {
+    padding: 5px;
+    list-style: none; }
+
+/*# sourceMappingURL=app.css.map */

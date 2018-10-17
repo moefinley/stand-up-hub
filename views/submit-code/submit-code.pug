@@ -1,0 +1,16 @@
+extends ../layout
+
+block content
+    h1 #{title}
+    .row
+        .col-md-6
+            p Upload a screen grab of any code you think is awesome
+            form(role='form', enctype='multipart/form-data', method='POST')
+                .form-group
+                    label.col-form-label.font-weight-bold Description
+                    .col-md-6
+                        textarea(name='description', required=true)
+                    label.col-form-label.font-weight-bold File Input
+                    .col-md-6
+                        input(type='file', name='myFile', required=true)
+                button.btn.btn-primary(type='submit') Submit
